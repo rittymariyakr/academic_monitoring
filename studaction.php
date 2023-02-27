@@ -18,7 +18,7 @@ $pwd=md5($pw);
 	  //  echo"<script>alert('Already Exists');window.location='addstud.php';</script>";
    }
    else{
- $sql="INSERT INTO `tbl_studreg`(`admno`, `class`, `First_name`, `Middle_nam`, `Last_name`) VALUES ('$admno','$s_class','$f_name','$l_name','$m_name')";
+ $sql="INSERT INTO `tbl_studreg`(`admno`,  `First_name`, `Middle_nam`, `Last_name`,`class`) VALUES ('$admno','$f_name','$l_name','$m_name','$s_class')";
  $db->insertQuery($sql);
  $ss="SELECT max(stud_id) as tid from tbl_studreg";
  $rs=$db->selectData($ss);
