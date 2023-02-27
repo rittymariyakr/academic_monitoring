@@ -12,13 +12,13 @@ if(isset($_GET["id"]))
         echo("<script>alert('Are you sure?');</script>");
     }
     else
-    echo("<script>alert('Success ');</script>");
-    echo("<script>location.href='stud.php'</script>");
+    echo("<script>alert('Leave Approved! ');</script>");
+    echo("<script>location.href='leave_status.php'</script>");
     
  }
 
 ?>
-
+<!-- 
 if(isset($_POST['reject']))
 {
     $request_id=$_POST['request_id'];
@@ -33,4 +33,4 @@ if(isset($_POST['reject']))
     {
         echo "<script> alert('SQL error: Update query error'); </script>";
     }
-}
+} -->

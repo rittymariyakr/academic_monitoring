@@ -167,7 +167,7 @@ $row=mysqli_fetch_array($rs);
                         <div class="col-md-6 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
-                                    <table>
+                                    <table class="table table-striped">
                                         <tr>
                                             <th>SL.No</th>
                                             <th> </th>

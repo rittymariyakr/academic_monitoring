@@ -1,19 +1,71 @@
-<?php session_start(); ?>
+<?php
+session_start();
+//authorization
+if (!isset($_SESSION['uid']) || ($_SESSION['utype'] != 'admin' && $_SESSION['utype'] != 'teacher')) {
+  echo "<script>alert('You are not authorized to view this page!');</script>";
+  echo "<script>location.href='index.php';</script>";
+}
+echo "UID $_SESSION[uid]";
+//Select teacher id using uid
+
+$con = mysqli_connect("localhost", "root", "", "studmgsystem");
+
+$sql = "select teach_id from tbl_teachreg where email='$_SESSION[uid]'";
+//echo $sql;
+$data = mysqli_query($con, $sql);
+$teacher_id = '';
+while ($row = mysqli_fetch_array($data)) {
+  $teacher_id = $row['teach_id'];  
+}
+if(isset($_POST['approve']))
+{
+  $status='approved';
+  $leave_id=$_POST['leave_id'];
+  $query="UPDATE tbl_leave SET status='$status' WHERE leave_id='$leave_id'";
+  $res_query=mysqli_query($con,$query);
+  if($res_query)
+  {
+    echo "<script> alert('Leave approved'); </script>";
+  }
+  else
+   echo "<script> alert('Query Failed'); </script>";
+}
+if(isset($_POST['reject']))
+{
+  $status='rejected';
+  $leave_id=$_POST['leave_id'];
+  $query="UPDATE tbl_leave SET status='$status' WHERE leave_id='$leave_id'";
+  $res_query=mysqli_query($con,$query);
+  if($res_query)
+  {
+    echo "<script> alert('Leave rejected'); </script>";
+  }
+  else
+   echo "<script> alert('Query Failed'); </script>";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <script type="text/javascript">
-    function preventBack() {
-      window.history.forward();
-    }
+<style>
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
 
-    setTimeout("preventBack()", 0);
+.button3 {background-color: #f44336;} /* Red */ 
 
-    window.onunload = function() {
-      null
-    };
-  </script>
+</style>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -21,20 +73,28 @@
   <!-- plugins:css -->
   <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-  <!-- endinject -->
-  <!-- Plugin css for this page -->
-  <!-- End plugin css for this page -->
-  <!-- inject:css -->
-  <!-- endinject -->
-  <!-- Layout styles -->
   <link rel="stylesheet" href="assets/css/style.css">
   <!-- End layout styles -->
   <link rel="shortcut icon" href="assets/images/favicon.ico" />
-  <style>
-    .dropdown-item:hover {
-      color: black !important;
+  <script>
+    function loadDoc() {
+      //alert('HUP');
+      var hour = document.frmtimetable.hour.value;
+      var day = document.frmtimetable.day.value;
+      var course = document.frmtimetable.course.value;
+      //alert(hour+day+course);
+
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          document.getElementById("a1").innerHTML = xhttp.responseText;
+        }
+      };
+      xhttp.open("GET", "selectteacher.php?hour=" + hour + "&day=" + day + "&course=" + course, true);
+      xhttp.send();
     }
-  </style>
+  </script>
 </head>
 
 <body>
@@ -46,18 +106,19 @@
         <a class="navbar-brand brand-logo" href="#"> <img src="images/logo.jpg" alt=""></a>
         <a class="navbar-brand brand-logo-mini" href="#"> <img src="images/logo.svg" alt=""></a>
       </div>
+
+      <?php
+      $uid = $_SESSION['uid'];
+      $con = mysqli_connect("localhost", "root", "", "studmgsystem");
+      $s = "SELECT * FROM tbl_teachreg where teach_id='$uid'";
+      $result = mysqli_query($con, $s);
+      $row = mysqli_fetch_array($result);
+      ?>
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
           <span class="mdi mdi-menu"></span>
         </button>
-        <?php
-        $uid = $_SESSION['uid'];
-        include('DatabaseCon.php');
-        $db = new DatabaseCon;
-        $s = "SELECT * FROM tbl_teachreg where teach_id='$uid'";
-        $rs = $db->selectData($s);
-        $row = mysqli_fetch_array($rs);
-        ?>
+
         <ul class="navbar-nav navbar-nav-right">
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
@@ -67,7 +128,7 @@
               </div>
               <div class="nav-profile-text">
                 <!-- <p class="mb-1 text-black">Welcome Admin</p> -->
-                <?= $row['firstname']; ?>
+                <?= $row['firstname']; ?>&nbsp;<?= $row['lastname']; ?>
               </div>
             </a>
             <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
@@ -101,7 +162,7 @@
           <li class="nav-item nav-profile">
             <a href="#" class="nav-link">
               <div class="nav-profile-image">
-                <img src="<?= $row['image']; ?>" alt="profile">
+                <img src="assets/images/faces/face1.jpg" alt="profile">
                 <span class="login-status online"></span>
                 <!--change to offline or busy as needed-->
               </div>
@@ -130,39 +191,12 @@
               <i class="mdi mdi-home menu-icon"></i>
             </a>
           </li>
-          
-          <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#student_details" aria-expanded="false" aria-controls="student_details">
-              <span class="menu-title">Leave</span>
-              <i class="menu-arrow"></i>
-              <i class="mdi mdi-contacts menu-icon"></i>
-            </a>
-            <div class="collapse" id="student_details">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="leave_status.php">View Student Leave</a></li>
-                <li class="nav-item"> <a class="nav-link" href="stud_leavestatus.php">View Approved Leave  </a></li>
-                <li class="nav-item"> <a class="nav-link" href="stud_leavestatus.php">View Rejected Leave  </a></li>
-
-              </ul>
-            </div>
-          </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="viewstud1.php">
-              <span class="menu-title">Student</span>
-              <i class="mdi mdi-contacts menu-icon"></i>
-            </a>
-          </li> -->
           <li class="nav-item">
             <a class="nav-link" href="classattendance.php">
               <span class="menu-title">Mark Attendance</span>
               <i class="mdi mdi-contacts menu-icon"></i>
             </a>
           </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="classattendancereport.php">
-              <span class="menu-title">Attendance Report</span>
-              <i class="mdi mdi-contacts menu-icon"></i> -->
-            </a>
           <li class="nav-item">
 
             <a class="nav-link" href="chngp.php">
@@ -170,52 +204,86 @@
 
             </a>
           </li>
-
         </ul>
       </nav>
       <!-- partial -->
+      <?php
+
+
+
+      function showcombobox($tableid, $fieldid, $fieldname, $teacher_id)
+      {
+        $con = mysqli_connect("localhost", "root", "", "studmgsystem");
+
+        $sql = "select $fieldid,$fieldname from $tableid s,tbl_classteacher t where s.stream_id=t.stream_id and t.teacher_id='$teacher_id'";
+        echo $sql;
+        $data = mysqli_query($con, $sql);
+        $retvalue = '';
+        while ($row = mysqli_fetch_array($data)) {
+          $retvalue = $retvalue . "<option value='" . $row[$fieldid] . "'>" . $row[$fieldname] . "</option>";
+        }
+        echo $retvalue;
+      }
+      ?>
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="page-header">
-            <h3 class="page-title">
-              <span class="page-title-icon bg-gradient-primary text-white me-2">
-                <i class="mdi mdi-home"></i>
-              </span> Dashboard
-            </h3>
-
+            <h4 class="card-title">Leave</h4>
           </div>
           <div class="row">
-          <div class="col-md-12 school_pic" style="margin-bottom: -10%;">
-              <img src="./images/modern-school-building.jpg" alt="schooll" style="width: 100%;height: 70%;">
-            </div>
-            <div class="col-md-6 stretch-card grid-margin">
-              <div class="card bg-gradient-danger card-img-holder text-white">
+            <div class="col-md-8 grid-margin stretch-card">
+              <div class="card">
                 <div class="card-body">
-                  <img src="assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                  <h4 class="font-weight-normal mb-3"> <i class="mdi mdi-chart-line mdi-24px float-right"></i>
-                  </h4>
-                  <!-- <h2 class="mb-5">$ 15,0000</h2> -->
-                  <h6 class="card-text"></h6>
+
+
+                  <form  action="#" method="post" name=frmtimetable>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>SL.No</th>
+                            <th>Admission No.</th>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Reason</th>
+                            <th>Session</th>
+                            <th>Action</th>
+                            <th>Action</th>
+                        </tr>
+                        <?php
+                            $sql = "SELECT * FROM `tbl_leave` JOIN `tbl_studreg` ON `tbl_leave`.stud_id=`tbl_studreg`.stud_id WHERE `teach_id` = '$uid' AND status='pending'";
+                            $counter=0;
+                            $result = mysqli_query($con, $sql);
+                            while ($row = mysqli_fetch_array($result)) {?>
+                            <tr>
+                              <td><?php echo ++$counter; ?></td>
+                              <td><?=$row['admno']?></td>
+                              <td><?=$row['First_name'].' '.$row['Middle_nam'].$row['Last_name']?></td>
+                              <td><?=$row['date']?></td>
+                              <td><?=$row['reason']?></td>
+                              <td><?=$row['session']?></td>
+                              <form method="post" action="#">
+                                <input type="hidden" value="<?php echo $row['leave_id']; ?>" name="leave_id">
+                              <td><input type="submit" class="bg-success text-white" value="approve" name="approve"></input></td>
+                              <td><input type="submit" class="bg-danger text-white" value="reject" name="reject"></td>
+                            </form>
+                              </tr>
+                              <!-- <td><?=$row['session']?></td>
+                              <?php if($row['status']=="pending"){?>
+                              <td><a href="stud_leaveapprove.php" class="btn btn-success">Approve</a></td> -->
+                              <!-- <?php } else{?>
+                                <td><a href="#" class="btn btn-Danger">Reject</a></td>
+                                <?php }?> -->
+                            </tr>
+                           <?php } ?>
+                        
+
+                    </table>
+
+                  </form>
+
                 </div>
               </div>
             </div>
-            <div class="col-md-6 stretch-card grid-margin">
-              <div class="card bg-gradient-info card-img-holder text-white">
-                <div class="card-body">
-                  <img src="assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                  <h4 class="font-weight-normal mb-3"><i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
-                  </h4>
-                  <!-- <h2 class="mb-5">45,6334</h2> -->
-                  <h6 class="card-text"></h6>
-                </div>
-              </div>
-            </div>
-            
           </div>
-
-
-
-
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->

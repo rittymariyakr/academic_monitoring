@@ -210,7 +210,7 @@ $row=mysqli_fetch_array($rs);
                         <div class="col-md-6 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
-                                    <table>
+                                    <table class="table table-striped">
                                         <tr>
                                             <th>SL.No</th>
                                             <th> </th>
@@ -319,13 +319,23 @@ function check() {
         if($flag == 1){
             echo("<script>alert('Already Leave Applied')</script>");
         }else{
-        $sql="INSERT INTO `tbl_leave`(`stud_id`, `date`, `reason`,`session`,`status`) VALUES ('$uid','$date','$reason','$st','pending')";
-        $result=mysqli_query($con,$sql);
-        if($result){
-            echo("<script>alert('Success')</script>");
-            echo("<script>window.location.reload()</script>");
-            
-        }
+            $sql="SELECT `course` FROM `tbl_studreg` WHERE `stud_id` =$uid";
+            $result=mysqli_query($con,$sql);
+            $row=mysqli_fetch_array($result);
+            $course = $row['course'];
+
+            $sql="SELECT `assign_teacher` FROM `tbl_class` WHERE `cl_name` = '$course'";
+            $result=mysqli_query($con,$sql);
+            $row=mysqli_fetch_array($result);
+            $assign_teacher = $row['assign_teacher'];
+
+            $sql="INSERT INTO `tbl_leave`(`stud_id`, `date`, `reason`,`session`,`status`,`teach_id`) VALUES ('$uid','$date','$reason','$st','pending',$assign_teacher)";
+            $result=mysqli_query($con,$sql);
+            if($result){
+                echo("<script>alert('Success')</script>");
+                echo("<script>window.location.reload()</script>");
+                
+            }
     }
     }
 ?>
