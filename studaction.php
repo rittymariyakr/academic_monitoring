@@ -7,6 +7,19 @@ $f_name=$_POST['f_name'];
 $l_name=$_POST['l_name'];
 $m_name=$_POST['m_name'];
 $s_class=$_POST['s_class'];
+if($s_class==28){
+  $course="VIII (A)";
+}else if($s_class==29){
+  $course="VIII (B)";
+}else if($s_class==30){
+  $course="IX (A)";
+}else if($s_class==31){
+  $course="IX (B)";
+}else if($s_class==32){
+  $course="X (A)";
+}else if($s_class==33){
+  $course="X (B)";
+}
 $ut='student';
 $pw=$_POST['fpw'];
 
@@ -18,7 +31,7 @@ $pwd=md5($pw);
 	  //  echo"<script>alert('Already Exists');window.location='addstud.php';</script>";
    }
    else{
- $sql="INSERT INTO `tbl_studreg`(`admno`,  `First_name`, `Middle_nam`, `Last_name`,`class`) VALUES ('$admno','$f_name','$l_name','$m_name','$s_class')";
+ $sql="INSERT INTO `tbl_studreg`(`admno`, `class`,`course`, `First_name`, `Middle_nam`, `Last_name`) VALUES ('$admno','$s_class','$course','$f_name','$l_name','$m_name')";
  $db->insertQuery($sql);
  $ss="SELECT max(stud_id) as tid from tbl_studreg";
  $rs=$db->selectData($ss);

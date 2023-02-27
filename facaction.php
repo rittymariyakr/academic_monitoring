@@ -3,8 +3,8 @@ include('DatabaseCon.php');
 $db=new DatabaseCon;
 
 $em=$_POST['fem'];
-$f_name=$_POST['f_name'];
-$l_name=$_POST['l_name'];
+$f_name=$_POST['fn'];
+$l_name=$_POST['ln'];
 $ut='teacher';
 $pw=$_POST['fpw'];
 $encrpass= md5($pw);

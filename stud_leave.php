@@ -163,7 +163,7 @@ $row=mysqli_fetch_array($rs);
                   <i class="mdi mdi-home"></i>
                 </span> Dashboard
               </h3>-->
-                        <h4 class="card-title">Leave Apply</h4>
+                        <h4 class="card-title"> Apply Leave</h4>
                     </div>
                     <div class="row">
                         <div class="col-md-6 grid-margin stretch-card">
