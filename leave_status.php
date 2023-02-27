@@ -19,26 +19,26 @@ while ($row = mysqli_fetch_array($data)) {
 }
 if(isset($_POST['approve']))
 {
-  $status='approved';
+  $status='Approved';
   $leave_id=$_POST['leave_id'];
   $query="UPDATE tbl_leave SET status='$status' WHERE leave_id='$leave_id'";
   $res_query=mysqli_query($con,$query);
   if($res_query)
   {
-    echo "<script> alert('Leave approved'); </script>";
+    echo "<script> alert('Leave Approved'); </script>";
   }
   else
    echo "<script> alert('Query Failed'); </script>";
 }
 if(isset($_POST['reject']))
 {
-  $status='rejected';
+  $status='Rejected';
   $leave_id=$_POST['leave_id'];
   $query="UPDATE tbl_leave SET status='$status' WHERE leave_id='$leave_id'";
   $res_query=mysqli_query($con,$query);
   if($res_query)
   {
-    echo "<script> alert('Leave rejected'); </script>";
+    echo "<script> alert('Leave Rejected'); </script>";
   }
   else
    echo "<script> alert('Query Failed'); </script>";
@@ -49,23 +49,6 @@ if(isset($_POST['reject']))
 <html lang="en">
 
 <head>
-<style>
-.button {
-  background-color: #4CAF50; /* Green */
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-}
-
-.button3 {background-color: #f44336;} /* Red */ 
-
-</style>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">

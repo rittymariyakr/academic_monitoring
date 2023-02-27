@@ -163,8 +163,92 @@ $row=mysqli_fetch_array($rs);
                   <i class="mdi mdi-home"></i>
                 </span> Dashboard
               </h3>-->
+                        <h4 class="card-title"> Apply Bus Ticket</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form action="#" method="POST">
+                                        <table>
+                                            <!-- <tr>
+                                                <td>Select Leave Date : </td>
+                                                <td><input type="text" name="datePick" id="datePick" cols="30" row="2"></td>
+                                            </tr> -->
+                                            <!-- <tr>
+                                                <td><br></td>
+                                            </tr> -->
+                                            <!-- <tr>
+                                                <td>Route : </td>
+                                                <td><textarea name="leave_reason" cols="30" rows="2"></textarea></td>
+                                            </tr> -->
+                                            <tr>
+                                                <td><br></td>
+                                            </tr>
+                                            <td>Route : </td>
+                                            <td>
+                                            <select name="Session" id="Session">
+                                            <option value="select">Select</option>
+                                                <option value="kottayam">Kottayam</option>
+                                                <option value="changanassery">Changanassery</option>
+                                                <option value="Full Day">Ranni</option>
+                                                <option value="Full Day">Ettumanoor</option>
+                                            </select></td>
+                                            </tr>
+                                            <tr>
+                                                <td><br></td>
+</tr>    
+                                            <td>Stage : </td>
+                                            <td>
+                                            <select name="Session" id="Session">
+                                            <option value="select">Select</option>
+                                                <option value="kottayam">Kottayam</option>
+                                                <option value="changanassery">Changanassery</option>
+                                                <option value="Full Day">Ranni</option>
+                                                <option value="Full Day">Ettumanoor</option>
+                                            </select></td>
+                                            </tr>
 
-                        <div class="col-md-8 grid-margin stretch-card">
+                                            <tr>
+                                                <td><br></td>
+</tr>    
+                                            <td>Month : </td>
+                                            <td>
+                                            <select name="Session" id="Session">
+                                            <option value="select">Select</option>
+                                                <option value="kottayam">Kottayam</option>
+                                                <option value="changanassery">Changanassery</option>
+                                                <option value="Full Day">Ranni</option>
+                                                <option value="Full Day">Ettumanoor</option>
+                                            </select></td>
+                                            </tr>
+                                            <!-- <tr>
+                                                <td><br></td>
+                                            </tr> -->
+                                            <!-- <tr>
+                                                <td></td>
+                                            <td>Session : </td>
+                                            <td>
+                                            <select name="Session" id="Session">
+                                            <option value="select">Select</option>
+                                                <option value="FN">FN</option>
+                                                <option value="AN">AN</option>
+                                                <option value="Full Day">Full Day</option>
+                                            </select></td>
+                                            </tr>
+                                            <tr>
+                                                <td><br></td>
+                                            </tr> -->
+                                            <tr>
+                                                <td></td>
+                                                <td><button type="submit" name="save_date" class="btn btn-primary">Apply Leave</button></td>
+                                            </tr>
+                                        </table>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
                                     <table class="table table-striped">
@@ -175,12 +259,7 @@ $row=mysqli_fetch_array($rs);
                                             <th> </th>
                                             <th>Reason</th>
                                             <th> </th>
-                                            <th>Type</th>
-                                            <th> </th>
-                                            <th>Status</th>
-                                            <th> </th>
-                                            <th>Action</th>
-                                        
+                                            <th>Session</th>
                                         </tr>
                                         <?php
                                             $con=mysqli_connect("localhost","root","","studmgsystem");
@@ -196,10 +275,6 @@ $row=mysqli_fetch_array($rs);
                                             <td><?=$row['reason']?></td>
                                             <td> </td>
                                             <td><?=$row['session']?></td>
-                                            <td> </td>
-                                            <td><?=$row['status']?></td>
-                                            <td> </td>
-                                            <td><a href="delete_leave.php" class="btn btn-danger">Delete</a></td>
                                         </tr>
                                         <?php } ?>
                                     </table>
@@ -285,13 +360,23 @@ function check() {
         if($flag == 1){
             echo("<script>alert('Already Leave Applied')</script>");
         }else{
-        $sql="INSERT INTO `tbl_leave`(`stud_id`, `date`, `reason`,`session`) VALUES ('$uid','$date','$reason','$st')";
-        $result=mysqli_query($con,$sql);
-        if($result){
-            echo("<script>alert('Success')</script>");
-            echo("<script>window.location.reload()</script>");
-            
-        }
+            $sql="SELECT `course` FROM `tbl_studreg` WHERE `stud_id` =$uid";
+            $result=mysqli_query($con,$sql);
+            $row=mysqli_fetch_array($result);
+            $course = $row['course'];
+
+            $sql="SELECT `assign_teacher` FROM `tbl_class` WHERE `cl_name` = '$course'";
+            $result=mysqli_query($con,$sql);
+            $row=mysqli_fetch_array($result);
+            $assign_teacher = $row['assign_teacher'];
+
+            $sql="INSERT INTO `tbl_leave`(`stud_id`, `date`, `reason`,`session`,`status`,`teach_id`) VALUES ('$uid','$date','$reason','$st','pending',$assign_teacher)";
+            $result=mysqli_query($con,$sql);
+            if($result){
+                echo("<script>alert('Success')</script>");
+                echo("<script>window.location.reload()</script>");
+                
+            }
     }
     }
 ?>

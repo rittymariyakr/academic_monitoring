@@ -137,6 +137,19 @@ $row=mysqli_fetch_array($rs);
             </div>
           </li>
           <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#student_details" aria-expanded="false" aria-controls="student_details">
+              <span class="menu-title">Bus</span>
+              <i class="menu-arrow"></i>
+              <i class="mdi mdi-contacts menu-icon"></i>
+            </a>
+            <div class="collapse" id="student_details">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="stud_bus.php"> Apply Bus Ticket</a></li>
+                <li class="nav-item"> <a class="nav-link" href="#"> View </a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="view_timetable.php">
               <span class="menu-title">Timetable</span>
               <i class="mdi mdi-home menu-icon"></i>
