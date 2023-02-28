@@ -142,6 +142,8 @@
                 <li class="nav-item"> <a class="nav-link" href="leave_status.php">View Student Leave</a></li>
                 <li class="nav-item"> <a class="nav-link" href="stud_leavestatus.php">View Approved Leave  </a></li>
                 <li class="nav-item"> <a class="nav-link" href="stud_leavestatus.php">View Rejected Leave  </a></li>
+                <li class="nav-item"> <a class="nav-link" href="faculty_leave.php">Apply Leave</a></li>
+
 
               </ul>
             </div>
