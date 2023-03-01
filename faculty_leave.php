@@ -1,54 +1,19 @@
-<?php
-session_start();
-//authorization
-if (!isset($_SESSION['uid']) || ($_SESSION['utype'] != 'admin' && $_SESSION['utype'] != 'teacher')) {
-  echo "<script>alert('You are not authorized to view this page!');</script>";
-  echo "<script>location.href='index.php';</script>";
-}
-echo "UID $_SESSION[uid]";
-//Select teacher id using uid
-
-$con = mysqli_connect("localhost", "root", "", "studmgsystem");
-
-$sql = "select teach_id from tbl_teachreg where email='$_SESSION[uid]'";
-//echo $sql;
-$data = mysqli_query($con, $sql);
-$teacher_id = '';
-while ($row = mysqli_fetch_array($data)) {
-  $teacher_id = $row['teach_id'];  
-}
-if(isset($_POST['approve']))
-{
-  $status='Approved';
-  $leave_id=$_POST['leave_id'];
-  $query="UPDATE tbl_leave SET status='$status' WHERE leave_id='$leave_id'";
-  $res_query=mysqli_query($con,$query);
-  if($res_query)
-  {
-    echo "<script> alert('Leave Approved'); </script>";
-  }
-  else
-   echo "<script> alert('Query Failed'); </script>";
-}
-if(isset($_POST['reject']))
-{
-  $status='Rejected';
-  $leave_id=$_POST['leave_id'];
-  $query="UPDATE tbl_leave SET status='$status' WHERE leave_id='$leave_id'";
-  $res_query=mysqli_query($con,$query);
-  if($res_query)
-  {
-    echo "<script> alert('Leave Rejected'); </script>";
-  }
-  else
-   echo "<script> alert('Query Failed'); </script>";
-}
-?>
-
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+  <script type="text/javascript">
+    function preventBack() {
+      window.history.forward();
+    }
+
+    setTimeout("preventBack()", 0);
+
+    window.onunload = function() {
+      null
+    };
+  </script>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -56,153 +21,141 @@ if(isset($_POST['reject']))
   <!-- plugins:css -->
   <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <!-- endinject -->
+  <!-- Layout styles -->
   <link rel="stylesheet" href="assets/css/style.css">
   <!-- End layout styles -->
   <link rel="shortcut icon" href="assets/images/favicon.ico" />
-  <script>
-    function loadDoc() {
-      //alert('HUP');
-      var hour = document.frmtimetable.hour.value;
-      var day = document.frmtimetable.day.value;
-      var course = document.frmtimetable.course.value;
-      //alert(hour+day+course);
-
-
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          document.getElementById("a1").innerHTML = xhttp.responseText;
-        }
-      };
-      xhttp.open("GET", "selectteacher.php?hour=" + hour + "&day=" + day + "&course=" + course, true);
-      xhttp.send();
+  <style>
+    .dropdown-item:hover {
+      color: black !important;
     }
-  </script>
+  </style>
 </head>
 
 <body>
-  <div class="container-scroller">
-
-    <!-- partial:partials/_navbar.html -->
-    <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo" href="#"> <img src="images/logo.jpg" alt=""></a>
-        <a class="navbar-brand brand-logo-mini" href="#"> <img src="images/logo.svg" alt=""></a>
-      </div>
-
-      <?php
-      $uid = $_SESSION['uid'];
-      $con = mysqli_connect("localhost", "root", "", "studmgsystem");
-      $s = "SELECT * FROM tbl_teachreg where teach_id='$uid'";
-      $result = mysqli_query($con, $s);
-      $row = mysqli_fetch_array($result);
-      ?>
-      <div class="navbar-menu-wrapper d-flex align-items-stretch">
-        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-          <span class="mdi mdi-menu"></span>
-        </button>
-
-        <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item nav-profile dropdown">
-            <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-              <div class="nav-profile-img">
-                <img src="<?= $row['image']; ?>" alt="image">
-                <span class="availability-status online"></span>
-              </div>
-              <div class="nav-profile-text">
-                <!-- <p class="mb-1 text-black">Welcome Admin</p> -->
-                <?= $row['firstname']; ?>&nbsp;<?= $row['lastname']; ?>
-              </div>
-            </a>
-            <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-              <!-- <a class="dropdown-item" href="facmyprofile.php">
-                <i class="mdi mdi-cached me-2 text-success"></i> My Profile </a> -->
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="logout.php">
-                <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
+<div class="container-scroller">
+        <!-- partial:partials/_navbar.html -->
+        <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+                <a class="navbar-brand brand-logo" href="#"> <img src="images/logo.jpg" alt=""></a>
+                <a class="navbar-brand brand-logo-mini" href="#"> <img src="images/logo.svg" alt=""></a>
             </div>
-          </li>
+            <div class="navbar-menu-wrapper d-flex align-items-stretch">
+                <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                    <span class="mdi mdi-menu"></span>
+                </button>
+
+                <ul class="navbar-nav navbar-nav-right">
+                    <li class="nav-item nav-profile dropdown">
+                        <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <div class="nav-profile-img">
+                                <img src="<?= $row['image']; ?>" alt="image">
+                                <span class="availability-status online"></span>
+                            </div>
+                            <div class="nav-profile-text">
+                                <p class="mb-1 text-black">Welcome <?=$row['First_name']?></p>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+                            <!-- <a class="dropdown-item" href="facmyprofile.php">
+                <i class="mdi mdi-cached me-2 text-success"></i> My Profile </a> -->
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="logout.php">
+                                <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
+                        </div>
+                    </li>
 
 
 
-          <!-- <li class="nav-item nav-logout d-none d-lg-block">
+                    <!-- <li class="nav-item nav-logout d-none d-lg-block">
             <a class="nav-link" href="logout.php">  
               <i class="mdi mdi-power"></i>
             </a>
           </li> -->
 
-        </ul>
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-          <span class="mdi mdi-menu"></span>
-        </button>
-      </div>
-    </nav>
-    <!-- partial -->
-    <div class="container-fluid page-body-wrapper">
-      <!-- partial:partials/_sidebar.html -->
-      <nav class="sidebar sidebar-offcanvas" id="sidebar">
-        <ul class="nav">
-          <li class="nav-item nav-profile">
-            <a href="#" class="nav-link">
-              <div class="nav-profile-image">
-                <img src="assets/images/faces/face1.jpg" alt="profile">
-                <span class="login-status online"></span>
-                <!--change to offline or busy as needed-->
-              </div>
-              <div class="nav-profile-text d-flex flex-column">
-                <span class="font-weight-bold mb-2"><?=$row['firstname']?></span>
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                    data-toggle="offcanvas">
+                    <span class="mdi mdi-menu"></span>
+                </button>
+            </div>
+        </nav>
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:partials/_sidebar.html -->
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                <ul class="nav">
+                    <li class="nav-item nav-profile">
+                        <a href="#" class="nav-link">
+                            <div class="nav-profile-image">
+                                <img src="<?= $row['image']; ?>" alt="profile">
+                                <span class="login-status online"></span>
+                                <!--change to offline or busy as needed-->
+                            </div>
+                            <div class="nav-profile-text d-flex flex-column">
+                                <span class="font-weight-bold mb-2"><?=$row['First_name']?></span>
 
-              </div>
-              <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="fachome.php">
-              <span class="menu-title">Dashboard</span>
-              <i class="mdi mdi-home menu-icon"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="facmyprofile.php">
-              <span class="menu-title">My Profile</span>
-              <i class="mdi mdi-home menu-icon"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="edfacpro.php">
-              <span class="menu-title">Edit Profile</span>
-              <i class="mdi mdi-home menu-icon"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="classattendance.php">
-              <span class="menu-title">Mark Attendance</span>
-              <i class="mdi mdi-contacts menu-icon"></i>
-            </a>
-          </li>
-          <li class="nav-item">
+                            </div>
+                            <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="studhome.php">
+                            <span class="menu-title">Dashboard</span>
+                            <i class="mdi mdi-home menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="studmyprofile.php">
+                            <span class="menu-title">My Profile</span>
+                            <i class="mdi mdi-home menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="edstudpro.php">
+                            <span class="menu-title">Edit Profile</span>
+                            <i class="mdi mdi-home menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="view_timetable.php">
+                            <span class="menu-title">Timetable</span>
+                            <i class="mdi mdi-home menu-icon"></i>
+                        </a>
+                    </li>
+                    <!--<li class="nav-item">
+              <a class="nav-link" href="viewstud1.php">
+                <span class="menu-title">Student</span>
+                <i class="mdi mdi-contacts menu-icon"></i>
+              </a>
+            </li>-->
+                    <li class="nav-item">
 
-            <a class="nav-link" href="chngp.php">
-              <span class="menu-title">Change Password</span>
+                        <a class="nav-link" href="chngp.php">
+                            <span class="menu-title">Change Password</span>
 
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <!-- partial -->
-      
-      <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="page-header">
-            <h4 class="card-title">Leave</h4>
-          </div>
-          <div class="row">
-            <div class="col-md-10 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
+                        </a>
+                    </li>
 
+                </ul>
+            </nav>
+            <!-- partial -->
 
-                <h4 class="card-title"> Apply Leave</h4>
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="page-header">
+                        <!--<h3 class="page-title">
+                <span class="page-title-icon bg-gradient-primary text-white me-2">
+                  <i class="mdi mdi-home"></i>
+                </span> Dashboard
+              </h3>-->
+                        <h4 class="card-title"> Apply Leave</h4>
                     </div>
                     <div class="row">
                         <div class="col-md-6 grid-margin stretch-card">
@@ -289,24 +242,19 @@ if(isset($_POST['reject']))
 
                 </div>
                 <!-- content-wrapper ends -->
-
-                </div>
-              </div>
+                <!-- partial:partials/_footer.html -->
+                <footer class="footer">
+                    <div class="container-fluid d-flex justify-content-between">
+                    </div>
+                </footer>
+                <!-- partial -->
             </div>
-          </div>
+
+
+            <!-- main-panel ends -->
         </div>
-        <!-- content-wrapper ends -->
-        <!-- partial:partials/_footer.html -->
-        <footer class="footer">
-          <div class="container-fluid d-flex justify-content-between">
-          </div>
-        </footer>
-        <!-- partial -->
-      </div>
-      <!-- main-panel ends -->
+        <!-- page-body-wrapper ends -->
     </div>
-    <!-- page-body-wrapper ends -->
-  </div>
   <!-- container-scroller -->
   <!-- plugins:js -->
   <script src="assets/vendors/js/vendor.bundle.base.js"></script>
@@ -325,49 +273,5 @@ if(isset($_POST['reject']))
   <script src="assets/js/todolist.js"></script>
   <!-- End custom js for this page -->
 </body>
-<?php 
-    if(isset($_POST['save_date']))
-    {
-        
-        $reason =$_POST['leave_reason'];
-        $date = $_POST['datePick'];
-        $st = $_POST['Session'];
-
-        $con=mysqli_connect("localhost","root","","studmgsystem");
-        $sql = "SELECT * FROM `tbl_leave` WHERE stud_id = $uid";
-        $result=mysqli_query($con,$sql);
-        while($row=mysqli_fetch_array($result)){
-            if($row['date']==$date){
-                $flag = 1;
-            }
-        }
-        if($flag == 1){
-            echo("<script>alert('Already Leave Applied')</script>");
-        }else{
-            $sql="SELECT `course` FROM `tbl_studreg` WHERE `stud_id` =$uid";
-            $result=mysqli_query($con,$sql);
-            $row=mysqli_fetch_array($result);
-            $course = $row['course'];
-
-            $sql="SELECT `assign_teacher` FROM `tbl_class` WHERE `cl_name` = '$course'";
-            $result=mysqli_query($con,$sql);
-            $row=mysqli_fetch_array($result);
-            $assign_teacher = $row['assign_teacher'];
-
-            $sql="INSERT INTO `tbl_leave`(`stud_id`, `date`, `reason`,`session`,`status`,`teach_id`) VALUES ('$uid','$date','$reason','$st','pending',$assign_teacher)";
-            $result=mysqli_query($con,$sql);
-            if($result){
-                echo("<script>alert('Success')</script>");
-                echo("<script>window.location.reload()</script>");
-                
-            }
-    }
-    }
-?>
-<script>
-$(document).ready(function() {
-    $('#datePick').multiDatesPicker();
-});
-</script>
 
 </html>

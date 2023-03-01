@@ -40,6 +40,6 @@ $pwd=md5($pw);
  $sql="INSERT INTO `tbl_login`(`login_id`, `usertype`, `username`, `password`, `status`) VALUES ('$tid','$ut','$admno','$pwd','true')";
 
   if($db->insertQuery($sql))
-    echo"<script>alert('success');window.location='addstud.php';</script>";
+    echo"<script>alert('success');</script>";
    }
 ?>

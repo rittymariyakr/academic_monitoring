@@ -178,8 +178,8 @@ $row=mysqli_fetch_array($rs);
                                             <th>Type</th>
                                             <th> </th>
                                             <th>Status</th>
-                                            <th> </th>
-                                            <th>Action</th>
+                                            <!-- <th> </th>
+                                            <th>Action</th> -->
                                         
                                         </tr>
                                         <?php
@@ -198,8 +198,8 @@ $row=mysqli_fetch_array($rs);
                                             <td><?=$row['session']?></td>
                                             <td> </td>
                                             <td><?=$row['status']?></td>
-                                            <td> </td>
-                                            <td><a href="delete_leave.php" class="btn btn-danger">Delete</a></td>
+                                            <!-- <td> </td> -->
+                                            <!-- <td><a href="delete_leave.php" class="btn btn-danger">Delete</a></td> -->
                                         </tr>
                                         <?php } ?>
                                     </table>

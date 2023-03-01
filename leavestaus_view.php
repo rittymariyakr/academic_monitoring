@@ -163,130 +163,68 @@ $row=mysqli_fetch_array($rs);
                   <i class="mdi mdi-home"></i>
                 </span> Dashboard
               </h3>-->
-                        <h4 class="card-title"> Apply Bus Ticket</h4>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <form action="#" method="POST">
-                                        <table>
-                                            <!-- <tr>
-                                                <td>Select Leave Date : </td>
-                                                <td><input type="text" name="datePick" id="datePick" cols="30" row="2"></td>
-                                            </tr> -->
-                                            <!-- <tr>
-                                                <td><br></td>
-                                            </tr> -->
-                                            <!-- <tr>
-                                                <td>Route : </td>
-                                                <td><textarea name="leave_reason" cols="30" rows="2"></textarea></td>
-                                            </tr> -->
-                                            <tr>
-                                                <td><br></td>
-                                            </tr>
-                                            <td>Route : </td>
-                                            <td>
-                                            <select name="Session" id="Session">
-                                            <option value="select">Select</option>
-                                                <option value="kottayam">Kottayam</option>
-                                                <option value="changanassery">Changanassery</option>
-                                                <option value="Full Day">Ranni</option>
-                                                <option value="Full Day">Ettumanoor</option>
-                                            </select></td>
-                                            </tr>
-                                            <tr>
-                                                <td><br></td>
-</tr>    
-                                            <td>Stage : </td>
-                                            <td>
-                                            <select name="Session" id="Session">
-                                            <option value="select">Select</option>
-                                                <option value="kottayam">Kottayam</option>
-                                                <option value="changanassery">Changanassery</option>
-                                                <option value="Full Day">Ranni</option>
-                                                <option value="Full Day">Ettumanoor</option>
-                                            </select></td>
-                                            </tr>
+                        
 
-                                            <tr>
-                                                <td><br></td>
-</tr>    
-                                            <td>Month : </td>
-                                            <td>
-                                            <select name="Session" id="Session">
-                                            <option value="select">Select</option>
-                                                <option value="march">March 2023</option>
-                                                <option value="april">April 2023</option>
-                                                <option value="may">May 2023</option>
-                                                <option value="june">June 2023</option>
-                                            </select></td>
-                                            </tr>
-                                            <!-- <tr>
-                                                <td><br></td>
-                                            </tr> -->
-                                            <!-- <tr>
-                                                <td></td>
-                                            <td>Session : </td>
-                                            <td>
-                                            <select name="Session" id="Session">
-                                            <option value="select">Select</option>
-                                                <option value="FN">FN</option>
-                                                <option value="AN">AN</option>
-                                                <option value="Full Day">Full Day</option>
-                                            </select></td>
-                                            </tr>
-                                            <tr>
-                                                <td><br></td>
-                                            </tr> -->
-                                            <tr>
-                                                <td></td>
-                                                <td><button type="submit" name="save_date" class="btn btn-primary">Apply Leave</button></td>
-                                            </tr>
-                                        </table>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <th>SL.No</th>
-                                            <th> </th>
-                                            <th>Date</th>
-                                            <th> </th>
-                                            <th>Reason</th>
-                                            <th> </th>
-                                            <th>Session</th>
-                                        </tr>
-                                        <?php
-                                            $con=mysqli_connect("localhost","root","","studmgsystem");
-                                            $sql = "SELECT * FROM `tbl_leave` WHERE stud_id = $uid";
-                                            $counter=0;
-                                            $result=mysqli_query($con,$sql);
-                                            while($row=mysqli_fetch_array($result)){?>
-                                        <tr>
-                                            <td><?php echo ++$counter; ?></td>
-                                            <td> </td>
-                                            <td><?=$row['date']?></td>
-                                            <td> </td>
-                                            <td><?=$row['reason']?></td>
-                                            <td> </td>
-                                            <td><?=$row['session']?></td>
-                                        </tr>
-                                        <?php } ?>
-                                    </table>
-
-                                </div>
-                            </div>
-                        </div>
+              <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="page-header">
+            <h4 class="card-title">Appoved Leave</h4>
+          </div>
+          <div class="row">
+            <div class="col-md-8 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
 
 
-                    </div>
+                  <form  action="#" method="post" name=frmtimetable>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>SL.No</th>
+                            <th>Admission No.</th>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Reason</th>
+                            <th>Session</th>
+                            <th>Status</th>
+                        </tr>
+                        <?php
+                            $sql = "SELECT * FROM `tbl_leave` JOIN `tbl_studreg` ON `tbl_leave`.stud_id=`tbl_studreg`.stud_id WHERE `teach_id` = '$uid' AND status='Approved'";
+                            $counter=0;
+                            $result = mysqli_query($con, $sql);
+                            while ($row = mysqli_fetch_array($result)) {?>
+                            <tr>
+                              <td><?php echo ++$counter; ?></td>
+                              <td><?=$row['admno']?></td>
+                              <td><?=$row['First_name'].' '.$row['Middle_nam'].$row['Last_name']?></td>
+                              <td><?=$row['date']?></td>
+                              <td><?=$row['reason']?></td>
+                              <td><?=$row['session']?></td>
+                              <td><font color=green><?=$row['status']?></font></td>
+                              <!-- <form method="post" action="#">
+                                <input type="hidden" value="<?php echo $row['leave_id']; ?>" name="leave_id">
+                              <td><input type="submit" class="bg-success text-white" value="approve" name="approve"></input></td>
+                              <td><input type="submit" class="bg-danger text-white" value="reject" name="reject"></td>
+                            </form> -->
+                              </tr>
+                              <!-- <td><?=$row['session']?></td>
+                              <?php if($row['status']=="pending"){?>
+                              <td><a href="stud_leaveapprove.php" class="btn btn-success">Approve</a></td> -->
+                              <!-- <?php } else{?>
+                                <td><a href="#" class="btn btn-Danger">Reject</a></td>
+                                <?php }?> -->
+                            </tr>
+                           <?php } ?>
+                        
 
+                    </table>
 
+                  </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
 
                 </div>
