@@ -19,7 +19,7 @@ while ($row = mysqli_fetch_array($data)) {
 }
 if(isset($_POST['approve']))
 {
-  $status='approved';
+  $status='Approved';
   $leave_id=$_POST['leave_id'];
   $query="UPDATE tbl_leave SET status='$status' WHERE leave_id='$leave_id'";
   $res_query=mysqli_query($con,$query);
@@ -32,7 +32,7 @@ if(isset($_POST['approve']))
 }
 if(isset($_POST['reject']))
 {
-  $status='rejected';
+  $status='Rejected';
   $leave_id=$_POST['leave_id'];
   $query="UPDATE tbl_leave SET status='$status' WHERE leave_id='$leave_id'";
   $res_query=mysqli_query($con,$query);

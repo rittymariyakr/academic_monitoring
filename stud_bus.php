@@ -43,6 +43,13 @@ $row=mysqli_fetch_array($rs);
     <link rel="stylesheet" href="assets/css/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="assets/images/favicon.ico" />
+
+    <style>
+    form {
+        padding: 50px;
+    }
+    </style>
+
 </head>
 
 <body>
@@ -166,143 +173,60 @@ $row=mysqli_fetch_array($rs);
                         <h4 class="card-title"> Apply Bus Ticket</h4>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 grid-margin stretch-card">
+                        <div class=" col-md-6 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
-                                    <form action="#" method="POST">
-                                        <table>
-                                            <!-- <tr>
-                                                <td>Select Leave Date : </td>
-                                                <td><input type="text" name="datePick" id="datePick" cols="30" row="2"></td>
-                                            </tr> -->
-                                            <!-- <tr>
-                                                <td><br></td>
-                                            </tr> -->
-                                            <!-- <tr>
-                                                <td>Route : </td>
-                                                <td><textarea name="leave_reason" cols="30" rows="2"></textarea></td>
-                                            </tr> -->
-                                            <tr>
-                                                <td><br></td>
-                                            </tr>
-                                            <td>Route : </td>
+                                    <form>
+                                        <div class="form-group col-md-4">
                                             <td>
-                                            <select name="Session" id="Session">
-                                            <option value="select">Select</option>
-                                                <option value="kottayam">Kottayam</option>
-                                                <option value="changanassery">Changanassery</option>
-                                                <option value="Full Day">Ranni</option>
-                                                <option value="Full Day">Ettumanoor</option>
-                                            </select></td>
-                                            </tr>
-                                            <tr>
-                                                <td><br></td>
-</tr>    
-                                            <td>Stage : </td>
-                                            <td>
-                                            <select name="Session" id="Session">
-                                            <option value="select">Select</option>
-                                                <option value="kottayam">Kottayam</option>
-                                                <option value="changanassery">Changanassery</option>
-                                                <option value="Full Day">Ranni</option>
-                                                <option value="Full Day">Ettumanoor</option>
-                                            </select></td>
-                                            </tr>
+                                            <label for="inputState">Route</label>
+                                            <select class="form-control" id="inputState">
+                                                <option value="SelectState">Select State</option>
+                                                <option value="Kottayam">Kottayam</option>
+                                                <option value="Changassery">Changassery</option>
+                                                <option value="Cherthala">Cherthala</option>
+                                                <option value="Kannur">Kannur</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="inputDistrict">Stage</label>
+                                            <select class="form-control" id="inputDistrict">
+                                                <option value="">-- select one -- </option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                    <tr>
+                                        <td></td>
+                                        <td><button type="submit" name="save_date" class="btn btn-primary">Apply Leave</button></td>
+                                    </tr>
 
-                                            <tr>
-                                                <td><br></td>
-</tr>    
-                                            <td>Month : </td>
-                                            <td>
-                                            <select name="Session" id="Session">
-                                            <option value="select">Select</option>
-                                                <option value="march">March 2023</option>
-                                                <option value="april">April 2023</option>
-                                                <option value="may">May 2023</option>
-                                                <option value="june">June 2023</option>
-                                            </select></td>
-                                            </tr>
-                                            <!-- <tr>
-                                                <td><br></td>
-                                            </tr> -->
-                                            <!-- <tr>
-                                                <td></td>
-                                            <td>Session : </td>
-                                            <td>
-                                            <select name="Session" id="Session">
-                                            <option value="select">Select</option>
-                                                <option value="FN">FN</option>
-                                                <option value="AN">AN</option>
-                                                <option value="Full Day">Full Day</option>
-                                            </select></td>
-                                            </tr>
-                                            <tr>
-                                                <td><br></td>
-                                            </tr> -->
-                                            <tr>
-                                                <td></td>
-                                                <td><button type="submit" name="save_date" class="btn btn-primary">Apply Leave</button></td>
-                                            </tr>
-                                        </table>
+                                    </table>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <th>SL.No</th>
-                                            <th> </th>
-                                            <th>Date</th>
-                                            <th> </th>
-                                            <th>Reason</th>
-                                            <th> </th>
-                                            <th>Session</th>
-                                        </tr>
-                                        <?php
-                                            $con=mysqli_connect("localhost","root","","studmgsystem");
-                                            $sql = "SELECT * FROM `tbl_leave` WHERE stud_id = $uid";
-                                            $counter=0;
-                                            $result=mysqli_query($con,$sql);
-                                            while($row=mysqli_fetch_array($result)){?>
-                                        <tr>
-                                            <td><?php echo ++$counter; ?></td>
-                                            <td> </td>
-                                            <td><?=$row['date']?></td>
-                                            <td> </td>
-                                            <td><?=$row['reason']?></td>
-                                            <td> </td>
-                                            <td><?=$row['session']?></td>
-                                        </tr>
-                                        <?php } ?>
-                                    </table>
-
-                                </div>
-                            </div>
-                        </div>
-
-
                     </div>
-
-
-
-
                 </div>
-                <!-- content-wrapper ends -->
-                <!-- partial:partials/_footer.html -->
-                <footer class="footer">
-                    <div class="container-fluid d-flex justify-content-between">
-                    </div>
-                </footer>
-                <!-- partial -->
             </div>
-
-
-            <!-- main-panel ends -->
         </div>
-        <!-- page-body-wrapper ends -->
+
+
+
+    </div>
+
+    <!-- content-wrapper ends -->
+    <!-- partial:partials/_footer.html -->
+    <footer class="footer">
+        <div class="container-fluid d-flex justify-content-between">
+        </div>
+    </footer>
+    <!-- partial -->
+    </div>
+
+
+    <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
@@ -383,6 +307,60 @@ function check() {
 <script>
 $(document).ready(function() {
     $('#datePick').multiDatesPicker();
+});
+</script>
+<script src="stud_bus.php"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+    integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous">
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+    integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous">
+</script>
+<script>
+var Kottayam = ["26 Mile","Kanjirapally","Ponkunnam","18 Mile","Kodungur","14 Mile","12 Milel","Alampally","Pampady","8 Mile","Annadivayal","Kanjikuzhi","Kottayam"];
+var Changassery = ["Koratty","Vizhikathodu","Kallarakav","Chirakadav","Pazhayidam","Cheruvally","Manimalla","8 Mile","Karukachal","Mammoodu","Thengana","Changanasserry"];
+var Cherthala = ["Barpeta","Biswanath","Bongaigaon","Cachar","Charaideo","Chirang","Darrang"];
+var Kannur = [ "Kakkad","Chalad","Caltex","Chovva","","Thottada","Bhojpur","Buxar"];
+
+$("#inputState").change(function() {
+    var RouteSelected = $(this).val();
+    var optionsList;
+    var htmlString = "";
+
+    switch (RouteSelected) {
+        case "Kottayam":
+            optionsList = Kottayam;
+            break;
+        case "Changassery":
+            optionsList = Changassery;
+            break;
+        case "Cherthala":
+            optionsList = Cherthala;
+            break;
+        case "Kannur":
+            optionsList = Kannur;
+            break;
+    }
+
+
+    for (var i = 0; i < optionsList.length; i++) {
+        htmlString = htmlString + "<option value='" + optionsList[i] + "'>" + optionsList[i] + "</option>";
+    }
+    $("#inputDistrict").html(htmlString);
+
 });
 </script>
 

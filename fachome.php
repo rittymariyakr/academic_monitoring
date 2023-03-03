@@ -67,7 +67,7 @@
               </div>
               <div class="nav-profile-text">
                 <!-- <p class="mb-1 text-black">Welcome Admin</p> -->
-                <?= $row['firstname']; ?>
+                <?= $row['firstname']; ?>&nbsp;<?php echo $row['lastname']; ?>
               </div>
             </a>
             <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
@@ -106,7 +106,7 @@
                 <!--change to offline or busy as needed-->
               </div>
               <div class="nav-profile-text d-flex flex-column">
-                <span class="font-weight-bold mb-2"><?=$row['firstname']?></span>
+                <span class="font-weight-bold mb-2"><?=$row['firstname']?>&nbsp;<?php echo $row['lastname']; ?></span>
 
               </div>
               <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
@@ -140,9 +140,9 @@
             <div class="collapse" id="student_details">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="leave_status.php">View Student Leave</a></li>
-                <li class="nav-item"> <a class="nav-link" href="stud_leavestatus.php">View Approved Leave  </a></li>
+                <!-- <li class="nav-item"> <a class="nav-link" href="stud_leavestatus.php">View Approved Leave  </a></li>
                 <li class="nav-item"> <a class="nav-link" href="stud_leavestatus.php">View Rejected Leave  </a></li>
-                <li class="nav-item"> <a class="nav-link" href="faculty_leave.php">Apply Leave</a></li>
+                <li class="nav-item"> <a class="nav-link" href="faculty_leave.php">Apply Leave</a></li> -->
 
 
               </ul>
