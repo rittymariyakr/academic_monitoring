@@ -176,31 +176,45 @@ $row=mysqli_fetch_array($rs);
                         <div class=" col-md-6 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
-                                    <form>
+                                    <form method="POST" name="myForm">
                                         <div class="form-group col-md-4">
                                             <td>
-                                            <label for="inputState">Route</label>
-                                            <select class="form-control" id="inputState">
-                                                <option value="SelectState">Select State</option>
-                                                <option value="Kottayam">Kottayam</option>
-                                                <option value="Changassery">Changassery</option>
-                                                <option value="Cherthala">Cherthala</option>
-                                                <option value="Kannur">Kannur</option>
-                                            </select>
+                                                <label for="inputState">Route</label>
+                                                <select class="form-control" name="route "id="inputState">
+                                                    <option value="SelectState">Select Route</option>
+                                                    <option value="Kottayam">Kottayam</option>
+                                                    <option value="Changassery">Changassery</option>
+                                                    <option value="Ranni">Ranni</option>
+                                                    <option value="Ettumanoor">Ettumanoor</option>
+                                                </select>
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label for="inputDistrict">Stage</label>
-                                            <select class="form-control" id="inputDistrict">
+                                            <select class="form-control" name="stage" id="inputDistrict" required>
                                                 <option value="">-- select one -- </option>
                                             </select>
                                         </div>
-                                    </form>
-                                    <tr>
-                                        <td></td>
-                                        <td><button type="submit" name="save_date" class="btn btn-primary">Apply Leave</button></td>
-                                    </tr>
+                                        <!-- <h1>Display Radio Buttons</h1> -->
+                                            <p>Ticket Type:</p>
+                                            <input type="radio" id="ticket" name="type" value="Monthly" required>
+                                            <label for="monthly">Monthly</label><br><br>
 
-                                    </table>
+                                                <label for="inputState">Month</label><br><br>
+                                                <div class="form-group col-md-4">
+                                                <select name="month" class="form-control" id="month">
+                                                    <option value="SelectState">Select Month</option>
+                                                    <option value="March 2023">March 2023</option>
+                                                    <option value="April 2023">June 2023</option>
+                                                    <option value="May 2023">July 2023</option>
+                                                    <option value="June 2023">August 2023</option>
+                                                    <option value="June 2023">September 2023</option>
+                                                </select><br>
+                                        <tr>
+                                            <td></td>
+                                            <td><button type="submit" id="save_date" name="save_date" class="btn btn-primary">Apply</button></td>
+                                        </tr>
+
+                                        </table>
                                     </form>
                                 </div>
                             </div>
@@ -258,7 +272,7 @@ var numbers = /^\d{10}+$/;
 function check() {
     if (!document.getElementById("phn").value.match(numbers)) {
         alert('Input digits only for phone number');
-        return false;
+        return   false;
     } else {
         return true;
     }
@@ -269,32 +283,35 @@ function check() {
     if(isset($_POST['save_date']))
     {
         
-        $reason =$_POST['leave_reason'];
-        $date = $_POST['datePick'];
-        $st = $_POST['Session'];
+        $route =$_POST['route'];
+        $stage = $_POST['stage'];
+        $type = $_POST['type'];
+        $month = $_POST['month'];
+
 
         $con=mysqli_connect("localhost","root","","studmgsystem");
-        $sql = "SELECT * FROM `tbl_leave` WHERE stud_id = $uid";
+        $sql = "SELECT * FROM `tbl_bus` WHERE status = 'true'";
         $result=mysqli_query($con,$sql);
         while($row=mysqli_fetch_array($result)){
-            if($row['date']==$date){
+            if($row['month']==$month){
                 $flag = 1;
             }
         }
         if($flag == 1){
-            echo("<script>alert('Already Leave Applied')</script>");
+            echo("<script>alert('Already Applied')</script>");
         }else{
-            $sql="SELECT `course` FROM `tbl_studreg` WHERE `stud_id` =$uid";
-            $result=mysqli_query($con,$sql);
-            $row=mysqli_fetch_array($result);
-            $course = $row['course'];
+            // $sql="SELECT `course` FROM `tbl_studreg` WHERE `stud_id` =$uid";
+            // $result=mysqli_query($con,$sql);
+            // $row=mysqli_fetch_array($result);
+            // $course = $row['course'];
 
-            $sql="SELECT `assign_teacher` FROM `tbl_class` WHERE `cl_name` = '$course'";
-            $result=mysqli_query($con,$sql);
-            $row=mysqli_fetch_array($result);
-            $assign_teacher = $row['assign_teacher'];
+            // $sql="SELECT `assign_teacher` FROM `tbl_class` WHERE `cl_name` = '$course'";
+            // $result=mysqli_query($con,$sql);
+            // $row=mysqli_fetch_array($result);
+            // $assign_teacher = $row['assign_teacher'];
 
-            $sql="INSERT INTO `tbl_leave`(`stud_id`, `date`, `reason`,`session`,`status`,`teach_id`) VALUES ('$uid','$date','$reason','$st','pending',$assign_teacher)";
+            // $sql="INSERT INTO `tbl_bus`(`route`, `stage`,`type`,`month`,`status`) VALUES ('$route','$stage','$type','$month','true')";
+            $sql="INSERT INTO `tbl_bus`(`route`, `stage`, `type`, `month`, `status`) VALUES ('$route','$stage','$type','$month','pending')";
             $result=mysqli_query($con,$sql);
             if($result){
                 echo("<script>alert('Success')</script>");
@@ -330,10 +347,16 @@ $(document).ready(function() {
     integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous">
 </script>
 <script>
-var Kottayam = ["26 Mile","Kanjirapally","Ponkunnam","18 Mile","Kodungur","14 Mile","12 Milel","Alampally","Pampady","8 Mile","Annadivayal","Kanjikuzhi","Kottayam"];
-var Changassery = ["Koratty","Vizhikathodu","Kallarakav","Chirakadav","Pazhayidam","Cheruvally","Manimalla","8 Mile","Karukachal","Mammoodu","Thengana","Changanasserry"];
-var Cherthala = ["Barpeta","Biswanath","Bongaigaon","Cachar","Charaideo","Chirang","Darrang"];
-var Kannur = [ "Kakkad","Chalad","Caltex","Chovva","","Thottada","Bhojpur","Buxar"];
+var Kottayam = ["26 Mile", "Kanjirapally", "Ponkunnam", "18 Mile", "Kodungur", "14 Mile", "12 Milel", "Alampally",
+    "Pampady", "8 Mile", "Annadivayal", "Kanjikuzhi", "Kottayam"
+];
+var Changassery = ["Koratty", "Vizhikathodu", "Kallarakav", "Chirakadav", "Pazhayidam", "Cheruvally", "Manimalla",
+    "8 Mile", "Karukachal", "Mammoodu", "Thengana", "Changanasserry"
+];
+var Ranni = ["Koratty", "Erumely", "Karimbinathod", "Mukkada", "Plachery", "Manthamaruthi", "Ranni"];
+var Ettumanoor = ["26 Mile", "Kanjirappally", "Kunnumbhagam", "Ponkunnam", "1 Mile", "Kooraly", "Vanchimala",
+    "Ettumanoor"
+];
 
 $("#inputState").change(function() {
     var RouteSelected = $(this).val();
@@ -347,11 +370,11 @@ $("#inputState").change(function() {
         case "Changassery":
             optionsList = Changassery;
             break;
-        case "Cherthala":
-            optionsList = Cherthala;
+        case "Ranni":
+            optionsList = Ranni;
             break;
-        case "Kannur":
-            optionsList = Kannur;
+        case "Ettumanoor":
+            optionsList = Ettumanoor;
             break;
     }
 
@@ -363,5 +386,7 @@ $("#inputState").change(function() {
 
 });
 </script>
+
+
 
 </html>
