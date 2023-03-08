@@ -1,22 +1,20 @@
+<?php
+session_start();
+//authorization
+if (!isset($_SESSION['uid']) || $_SESSION['utype'] != 'admin') {
+  echo "<script>alert('You are not authorized to view this page!');</script>";
+  echo "<script>location.href='index.php';</script>";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <script type="text/javascript">
-    function preventBack() {
-      window.history.forward();
-    }
-
-    setTimeout("preventBack()", 0);
-
-    window.onunload = function() {
-      null
-    };
-  </script>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Admin</title>
+  <title>Purple Admin</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
@@ -33,26 +31,16 @@
 
 <body>
   <div class="container-scroller">
-
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo" href="#"> <img src="images/logo.jpg" alt=""></a>
-        <a class="navbar-brand brand-logo-mini" href="#"> <img src="images/logo.svg" alt=""></a>
+        <a class="navbar-brand brand-logo" href="#"><img src="assets/images/logo.jpg" alt="logo" /></a>
+        <a class="navbar-brand brand-logo-mini" href="#"><img src="assets/images/logo-mini.svg" alt="logo" /></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
           <span class="mdi mdi-menu"></span>
         </button>
-
-        <?php
-        include('DatabaseCon.php');
-        $db = new DatabaseCon;
-        $s = "SELECT * FROM tbl_login where usertype='admin'";
-        $rs = $db->selectData($s);
-        $row = mysqli_fetch_array($rs);
-        ?>
-
 
         <ul class="navbar-nav navbar-nav-right">
           <li class="nav-item nav-profile dropdown">
@@ -62,23 +50,16 @@
                 <span class="availability-status online"></span>
               </div>
               <div class="nav-profile-text">
-                <!-- <p class="mb-1 text-black">Welcome Admin</p> -->
-                <?php echo $row['username']; ?>
+                <p class="mb-1 text-black">Welcome Admin</p>
               </div>
             </a>
             <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-              <!-- <a class="dropdown-item" href="#">
-                <i class="mdi mdi-cached me-2 text-success"></i> Activity Log </a> -->
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="logout.php">
-                <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
-            </div>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="logout.php">
+                  <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
+              </div>
           </li>
-
         </ul>
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-          <span class="mdi mdi-menu"></span>
-        </button>
       </div>
     </nav>
     <!-- partial -->
@@ -113,7 +94,6 @@
             </a>
             <div class="collapse" id="faculty_details">
               <ul class="nav flex-column sub-menu">
-              <li class="nav-item"> <a class="nav-link" href="addfac.php"> Faculty Add</a></li>
                 <li class="nav-item"> <a class="nav-link" href="faccsv.php"> Faculty Upload</a></li>
                 <li class="nav-item"> <a class="nav-link" href="facultyview.php"> Faculty view </a></li>
               </ul>
@@ -149,21 +129,6 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#" aria-expanded="false" aria-controls="">
-              <span class="menu-title">Bus</span>
-              <i class="menu-arrow"></i>
-              <i class="mdi mdi-medical-bag menu-icon"></i>
-            </a>
-            <div class="collapse" id="faculty_details">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="add_route.php"> Add Rote </a></li>
-                <!-- <li class="nav-item"> <a class="nav-link" href="#"> Add Subject </a></li>
-                <li class="nav-item"> <a class="nav-link" href="#"> Assign subject Teacher </a></li>
-                <li class="nav-item"> <a class="nav-link" href="#"> Assign Class Teacher </a></li> -->
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="classtimetable.php">
               <span class="menu-title">Add Timetable</span>
               <i class="mdi mdi-contacts menu-icon"></i>
@@ -181,40 +146,68 @@
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="page-header">
-            <h3 class="page-title">
-              <span class="page-title-icon bg-gradient-primary text-white me-2">
-                <i class="mdi mdi-home"></i>
-              </span> Dashboard
-            </h3>
-
-        </div>
+            <!--<h3 class="page-title">
+                <span class="page-title-icon bg-gradient-primary text-white me-2">
+                  <i class="mdi mdi-home"></i>
+                </span> Dashboard
+              </h3>-->
+            <h4 class="card-title">Add Route</h4>
+          </div>
           <div class="row">
-          <div class="col-md-12 school_pic" style="margin-bottom: -10%;">
-              <img src="./images/modern-school-building.jpg" alt="schooll" style="width: 100%;height: 70%;">
-            </div>
-            <div class="col-md-6 stretch-card grid-margin">
-              <div class="card bg-gradient-danger card-img-holder text-white">
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
                 <div class="card-body">
-                  <img src="assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                  <h4 class="font-weight-normal mb-3">    <i class="mdi mdi-chart-line mdi-24px float-right"></i>
-                  </h4>
-                  <!-- <h2 class="mb-5">$ 15,0000</h2> -->
-                  <h6 class="card-text">    </h6>
+
+
+                  <form action="addrouteact.php" method="post">
+                    Add Route
+                    <input type="text" class="form-control" name="route" required autocomplete="off" /><br /><br />
+                    Add Place
+                    <input type="text" class="form-control" name="place" required autocomplete="off" /><br /><br />
+                    
+                    Price
+                    <input type="text" class="form-control" name="price" required autocomplete="off" /><br /><br />
+
+                    <input type="submit" value="ADD" class="btn btn-gradient-primary me-2" />
+
+
+                  </form>
+
                 </div>
               </div>
             </div>
-            <div class="col-md-6 stretch-card grid-margin">
-              <div class="card bg-gradient-info card-img-holder text-white">
+
+
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
                 <div class="card-body">
-                  <img src="assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                  <h4 class="font-weight-normal mb-3">      <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
-                  </h4>
-                  <!-- <h2 class="mb-5">45,6334</h2> -->
-                  <h6 class="card-text">   </h6>
+
+
+                  <table border="1" class="table table-bordered">
+                    <tr>
+                      <th>Route</th>
+                      <th>place</th>
+                      <th>Price</th>
+                    </tr>
+                    <?php
+                    include('DatabaseCon.php');
+                    $db = new DatabaseCon;
+                    $s = "select * from tbl_route where status='true'";
+                    $rs = $db->selectData($s);
+                    while ($row = mysqli_fetch_array($rs)) {
+                    ?>
+                      <tr>
+                        <td><?php echo $row['route_name']; ?></td>
+                        <td><?php echo $row['place']; ?></td>
+                        <td><?php echo $row['price']; ?></td>
+                        <td><a href="routedlt.php?id=<?php echo $row['route_id']; ?>"> <i class="mdi mdi-delete"></i></a></td>
+                      </tr>
+                    <?php } ?>
+                  </table>
+
                 </div>
               </div>
             </div>
-            
           </div>
 
 

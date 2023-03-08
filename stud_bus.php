@@ -179,42 +179,49 @@ $row=mysqli_fetch_array($rs);
                                     <form method="POST" name="myForm">
                                         <div class="form-group col-md-4">
                                             <td>
-                                                <label for="inputState">Route</label>
-                                                <select class="form-control" name="route "id="inputState">
-                                                    <option value="SelectState">Select Route</option>
-                                                    <option value="Kottayam">Kottayam</option>
-                                                    <option value="Changassery">Changassery</option>
-                                                    <option value="Ranni">Ranni</option>
-                                                    <option value="Ettumanoor">Ettumanoor</option>
-                                                </select>
+                                                Route : <select class="form-control" name="s_class" class="form-control">
+                                                    <?php
+                      $con = mysqli_connect("localhost", "root", "", "studmgsystem");
+                      $qr = "SELECT `route_name` FROM `tbl_route`";
+                      $data = mysqli_query($con, $qr);
+                      while ($row = mysqli_fetch_array($data)) {
+                        echo "<option value='$row[route_id]'>" . $row['route_name'] . "</option>";
+                      }
+                      ?>
                                         </div>
                                         <div class="form-group col-md-4">
-                                            <label for="inputDistrict">Stage</label>
-                                            <select class="form-control" name="stage" id="inputDistrict" required>
-                                                <option value="">-- select one -- </option>
-                                            </select>
+                                            Place : <select class="form-control" name="s_class" class="form-control">
+                                                <?php
+                      $con = mysqli_connect("localhost", "root", "", "studmgsystem");
+                      $pr = "SELECT `route_name` FROM `tbl_route`";
+                      $data = mysqli_query($con, $pr);
+                      while ($row = mysqli_fetch_array($data)) {
+                        echo "<option value='$row[route_id]'>" . $row['place'] . "</option>";
+                      }
+                      ?>
                                         </div>
                                         <!-- <h1>Display Radio Buttons</h1> -->
-                                            <p>Ticket Type:</p>
-                                            <input type="radio" id="ticket" name="type" value="Monthly" required>
-                                            <label for="monthly">Monthly</label><br><br>
+                                        <p>Ticket Type:</p>
+                                        <input type="radio" id="ticket" name="type" value="Monthly" required>
+                                        <label for="monthly">Monthly</label><br><br>
 
-                                                <label for="inputState">Month</label><br><br>
-                                                <div class="form-group col-md-4">
-                                                <select name="month" class="form-control" id="month">
-                                                    <option value="SelectState">Select Month</option>
-                                                    <option value="March 2023">March 2023</option>
-                                                    <option value="April 2023">June 2023</option>
-                                                    <option value="May 2023">July 2023</option>
-                                                    <option value="June 2023">August 2023</option>
-                                                    <option value="June 2023">September 2023</option>
-                                                </select><br>
-                                        <tr>
-                                            <td></td>
-                                            <td><button type="submit" id="save_date" name="save_date" class="btn btn-primary">Apply</button></td>
-                                        </tr>
+                                        <label for="inputState">Month</label><br><br>
+                                        <div class="form-group col-md-4">
+                                            <select name="month" class="form-control" id="month">
+                                                <option value="SelectState">Select Month</option>
+                                                <option value="March 2023">March 2023</option>
+                                                <option value="April 2023">June 2023</option>
+                                                <option value="May 2023">July 2023</option>
+                                                <option value="June 2023">August 2023</option>
+                                                <option value="June 2023">September 2023</option>
+                                            </select><br>
+                                            <tr>
+                                                <td></td>
+                                                <td><button type="submit" id="save_date" name="save_date"
+                                                        class="btn btn-primary">Apply</button></td>
+                                            </tr>
 
-                                        </table>
+                                            </table>
                                     </form>
                                 </div>
                             </div>
@@ -272,7 +279,7 @@ var numbers = /^\d{10}+$/;
 function check() {
     if (!document.getElementById("phn").value.match(numbers)) {
         alert('Input digits only for phone number');
-        return   false;
+        return false;
     } else {
         return true;
     }
