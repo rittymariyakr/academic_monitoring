@@ -1,3 +1,10 @@
+<?php
+    if(isset($_POST['route_name'])){
+        echo "Good....";
+    }
+?>
+
+
 <!DOCTYPE html>
 <?php
 session_start();
@@ -33,6 +40,8 @@ $row=mysqli_fetch_array($rs);
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
 
     <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.js" integrity="sha512-nO7wgHUoWPYGCNriyGzcFwPSF+bPDOR+NvtOYy2wMcWkrnCNPKBcFEkU80XIN14UVja0Gdnff9EmydyLlOL7mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- endinject -->
     <!-- Plugin css for this page -->
@@ -172,41 +181,41 @@ $row=mysqli_fetch_array($rs);
               </h3>-->
                         <h4 class="card-title"> Apply Bus Ticket</h4>
                     </div>
-                    <div class="row">
+
+                    <div class="row" id="apply_bus_book_div">
                         <div class=" col-md-6 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
-                                    <form method="POST" name="myForm">
+                                    <form method="POST" action="stud_bus.php" name="myForm">
                                         <div class="form-group col-md-4">
-                                            <td>
-                                                Route : <select class="form-control" name="s_class" class="form-control">
-                                                    <?php
-                      $con = mysqli_connect("localhost", "root", "", "studmgsystem");
-                      $qr = "SELECT `route_name` FROM `tbl_route`";
-                      $data = mysqli_query($con, $qr);
-                      while ($row = mysqli_fetch_array($data)) {
-                        echo "<option value='$row[route_id]'>" . $row['route_name'] . "</option>";
-                      }
-                      ?>
+                                            Route : <select class="form-control" onchange="updatePlaceSelect();" id="bus_route_select" name="bus_route_select" class="form-control">
+                                            <option value='' disabled selected>--- select place ---</option>
+                                            <?php
+                                                $con = mysqli_connect("localhost", "root", "", "studmgsystem");
+                                                $qr = "SELECT distinct(route_name) FROM `tbl_route`";
+                                                $data = mysqli_query($con, $qr);
+                                                while ($row = mysqli_fetch_array($data)) {
+                                                echo "<option value='$row[route_id]'>" . $row['route_name'] . "</option>";
+                                                }
+                                            ?>
+                                            </select>
                                         </div>
-                                        <div class="form-group col-md-4">
-                                            Place : <select class="form-control" name="s_class" class="form-control">
-                                                <?php
-                      $con = mysqli_connect("localhost", "root", "", "studmgsystem");
-                      $pr = "SELECT `route_name` FROM `tbl_route`";
-                      $data = mysqli_query($con, $pr);
-                      while ($row = mysqli_fetch_array($data)) {
-                        echo "<option value='$row[route_id]'>" . $row['place'] . "</option>";
-                      }
-                      ?>
-                                        </div>
-                                        <!-- <h1>Display Radio Buttons</h1> -->
-                                        <p>Ticket Type:</p>
-                                        <input type="radio" id="ticket" name="type" value="Monthly" required>
-                                        <label for="monthly">Monthly</label><br><br>
 
-                                        <label for="inputState">Month</label><br><br>
                                         <div class="form-group col-md-4">
+                                            Place : <select class="form-control" name="bus_place_select" id="bus_place_select" class="form-control">
+                        
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            <!-- <h1>Display Radio Buttons</h1> -->
+                                            <p>Ticket Type:</p>
+                                            <input type="radio" id="ticket" name="type" value="Monthly" checked required>
+                                            <label style="margin-top: 2px;margin-left: 5px;" for="monthly">Monthly</label>
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            <label for="inputState">Month</label>
                                             <select name="month" class="form-control" id="month">
                                                 <option value="SelectState">Select Month</option>
                                                 <option value="March 2023">March 2023</option>
@@ -214,14 +223,11 @@ $row=mysqli_fetch_array($rs);
                                                 <option value="May 2023">July 2023</option>
                                                 <option value="June 2023">August 2023</option>
                                                 <option value="June 2023">September 2023</option>
-                                            </select><br>
-                                            <tr>
-                                                <td></td>
-                                                <td><button type="submit" id="save_date" name="save_date"
-                                                        class="btn btn-primary">Apply</button></td>
-                                            </tr>
-
-                                            </table>
+                                            </select>
+                                            
+                                            <br><br>
+                                            
+                                            <button type="submit" id="save_date" name="save_date"class="btn btn-primary">Apply</button>
                                     </form>
                                 </div>
                             </div>
@@ -266,11 +272,11 @@ $row=mysqli_fetch_array($rs);
     <script src="assets/js/dashboard.js"></script>
     <script src="assets/js/todolist.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> -->
+    <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> -->
+    <!-- <script
         src="https://cdn.jsdelivr.net/gh/dubrox/Multiple-Dates-Picker-for-jQuery-UI@master/jquery-ui.multidatespicker.js">
-    </script>
+    </script> -->
 </body>
 <script type="text/javascript">
 var letters = /^[a-z A-Z]+$/;
@@ -290,8 +296,8 @@ function check() {
     if(isset($_POST['save_date']))
     {
         
-        $route =$_POST['route'];
-        $stage = $_POST['stage'];
+        $route =$_POST['bus_route_select'];
+        $stage = $_POST['bus_place_select'];
         $type = $_POST['type'];
         $month = $_POST['month'];
 
@@ -318,7 +324,8 @@ function check() {
             // $assign_teacher = $row['assign_teacher'];
 
             // $sql="INSERT INTO `tbl_bus`(`route`, `stage`,`type`,`month`,`status`) VALUES ('$route','$stage','$type','$month','true')";
-            $sql="INSERT INTO `tbl_bus`(`route`, `stage`, `type`, `month`, `status`) VALUES ('$route','$stage','$type','$month','pending')";
+            echo "<script>alert('$stage');</script>";
+            $sql="INSERT INTO `tbl_bus`(`bus _id`, `route`, `stage`, `type`, `month`, `status`) VALUES ('','$route','$stage','$type','$month','pending')";
             $result=mysqli_query($con,$sql);
             if($result){
                 echo("<script>alert('Success')</script>");
@@ -333,7 +340,7 @@ $(document).ready(function() {
     $('#datePick').multiDatesPicker();
 });
 </script>
-<script src="stud_bus.php"></script>
+<!-- <script src="stud_bus.php"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
 </script>
@@ -352,7 +359,7 @@ $(document).ready(function() {
 </script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
     integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous">
-</script>
+</script> -->
 <script>
 var Kottayam = ["26 Mile", "Kanjirapally", "Ponkunnam", "18 Mile", "Kodungur", "14 Mile", "12 Milel", "Alampally",
     "Pampady", "8 Mile", "Annadivayal", "Kanjikuzhi", "Kottayam"
@@ -394,6 +401,22 @@ $("#inputState").change(function() {
 });
 </script>
 
+<script>
+    function updatePlaceSelect(){
+        var route_name = $('#bus_route_select').find(":selected").text();
+        $.ajax({
+            url:"stud_bus_ajax.php",
+            method:"POST",
+            data:{route_name:route_name},
+            success:function(data){
+                $('#bus_place_select').html(data);
+            },
+            error:function(error){
+                alert("The Error is "+error);
+            }
+        });
+    }
 
+</script>
 
 </html>

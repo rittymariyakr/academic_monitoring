@@ -13,7 +13,7 @@ $str_class=$_POST['stream_class'];
    }
    else{
  $sql="insert into tbl_stream(class_name,stream_name,status)values('$str_class','$str','true')";
- $db->insertQuery($sql);
+ $db->insertQuery($ sql);
 echo"<script>alert('success');window.location='addclass.php';</script>";
    }
 ?>
