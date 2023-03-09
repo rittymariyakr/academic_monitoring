@@ -40,8 +40,12 @@ $row=mysqli_fetch_array($rs);
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
 
     <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.js" integrity="sha512-nO7wgHUoWPYGCNriyGzcFwPSF+bPDOR+NvtOYy2wMcWkrnCNPKBcFEkU80XIN14UVja0Gdnff9EmydyLlOL7mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
+        integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.js"
+        integrity="sha512-nO7wgHUoWPYGCNriyGzcFwPSF+bPDOR+NvtOYy2wMcWkrnCNPKBcFEkU80XIN14UVja0Gdnff9EmydyLlOL7mQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- endinject -->
     <!-- Plugin css for this page -->
@@ -188,34 +192,38 @@ $row=mysqli_fetch_array($rs);
                                 <div class="card-body">
                                     <form method="POST" action="stud_bus.php" name="myForm">
                                         <div class="form-group col-md-4">
-                                            Route : <select class="form-control" onchange="updatePlaceSelect();" id="bus_route_select" name="bus_route_select" class="form-control">
-                                            <option value='' disabled selected>--- select place ---</option>
-                                            <?php
+                                            Route : <select class="form-control" onchange="updatePlaceSelect();"
+                                                id="bus_route_select" name="bus_route_select" class="form-control">
+                                                <option value='' disabled selected>--- select place ---</option>
+                                                <?php
                                                 $con = mysqli_connect("localhost", "root", "", "studmgsystem");
                                                 $qr = "SELECT distinct(route_name) FROM `tbl_route`";
                                                 $data = mysqli_query($con, $qr);
                                                 while ($row = mysqli_fetch_array($data)) {
-                                                echo "<option value='$row[route_id]'>" . $row['route_name'] . "</option>";
+                                                echo "<option value='$row[route_name]'>" . $row['route_name'] . "</option>";
                                                 }
                                             ?>
                                             </select>
                                         </div>
 
                                         <div class="form-group col-md-4">
-                                            Place : <select class="form-control" name="bus_place_select" id="bus_place_select" class="form-control">
-                        
+                                            Place : <select class="form-control" name="bus_place_select"
+                                                onchange="setBusPrice();" id="bus_place_select" class="form-control">
+
                                             </select>
                                         </div>
 
                                         <div class="form-group col-md-4">
                                             <!-- <h1>Display Radio Buttons</h1> -->
                                             <p>Ticket Type:</p>
-                                            <input type="radio" id="ticket" name="type" value="Monthly" checked required>
-                                            <label style="margin-top: 2px;margin-left: 5px;" for="monthly">Monthly</label>
+                                            <input type="radio" id="ticket" name="type" value="Monthly" checked
+                                                required>
+                                            <label style="margin-top: 2px;margin-left: 5px;"
+                                                for="monthly">Monthly</label>
                                         </div>
 
                                         <div class="form-group col-md-4">
-                                            <label for="inputState">Month</label>
+                                            <label for="inputState">Month:</label>
                                             <select name="month" class="form-control" id="month">
                                                 <option value="SelectState">Select Month</option>
                                                 <option value="March 2023">March 2023</option>
@@ -224,10 +232,18 @@ $row=mysqli_fetch_array($rs);
                                                 <option value="June 2023">August 2023</option>
                                                 <option value="June 2023">September 2023</option>
                                             </select>
-                                            
+                                            <br>
+
+                                            <tr>
+                                                <p>Price:</p>
+                                                <textarea type="text" id="bus_ticket_price" col="1" rows="1" readonly></textarea>
+                                                <!-- <td><input class="form-control" id="bus_ticket_price" readonly ></td> -->
+                                            </tr>
+
                                             <br><br>
-                                            
-                                            <button type="submit" id="save_date" name="save_date"class="btn btn-primary">Apply</button>
+
+                                            <button type="submit" id="save_date" name="save_date" class="btn btn-primary">Apply</button>
+                                                
                                     </form>
                                 </div>
                             </div>
@@ -324,12 +340,12 @@ function check() {
             // $assign_teacher = $row['assign_teacher'];
 
             // $sql="INSERT INTO `tbl_bus`(`route`, `stage`,`type`,`month`,`status`) VALUES ('$route','$stage','$type','$month','true')";
-            echo "<script>alert('$stage');</script>";
-            $sql="INSERT INTO `tbl_bus`(`bus _id`, `route`, `stage`, `type`, `month`, `status`) VALUES ('','$route','$stage','$type','$month','pending')";
+            // echo "<script>alert('$stage');</script>";
+            $sql="INSERT INTO `tbl_bus` VALUES (null,'$route','$stage','$type','$month','pending')";
             $result=mysqli_query($con,$sql);
             if($result){
                 echo("<script>alert('Success')</script>");
-                echo("<script>window.location.reload()</script>");
+                echo("<script>window.location.href='payment.php';</script>");
                 
             }
     }
@@ -402,21 +418,59 @@ $("#inputState").change(function() {
 </script>
 
 <script>
-    function updatePlaceSelect(){
-        var route_name = $('#bus_route_select').find(":selected").text();
-        $.ajax({
-            url:"stud_bus_ajax.php",
-            method:"POST",
-            data:{route_name:route_name},
-            success:function(data){
-                $('#bus_place_select').html(data);
-            },
-            error:function(error){
-                alert("The Error is "+error);
-            }
-        });
-    }
+function updatePlaceSelect() {
+    var route_name = $('#bus_route_select').find(":selected").text();
+    $.ajax({
+        url: "stud_bus_ajax.php",
+        method: "POST",
+        data: {
+            route_name: route_name
+        },
+        success: function(data) {
+            $('#bus_place_select').html(data);
+        },
+        error: function(error) {
+            alert("The Error is " + error);
+        }
+    });
+}
 
+function setBusPrice() {
+    var route_name = $('#bus_route_select').find(":selected").text();
+    var place_name = $('#bus_place_select').find(":selected").text();
+    $.ajax({
+        url: "stud_bus_ajax.php",
+        method: "POST",
+        data: {
+            pricecheck: "true",
+            rname: route_name,
+            pname: place_name
+        },
+        success: function(data) {
+            $('#bus_ticket_price').val(data); // set the value of the textbox with id 'bus_ticket_price'
+        },
+        error: function(error) {
+            alert("The Error is " + error);
+        }
+    });
+}
+
+
+// function setBusPrice(){
+//     var route_name = $('#bus_route_select').find(":selected").text();
+//     var place_name = $('#bus_place_select').find(":selected").text();
+//     $.ajax({
+//         url:"stud_bus_ajax.php",
+//         method:"POST",
+//         data:{pricecheck:"true",rname:route_name, pname: place_name},
+//         success:function(data){
+//             $('#bus_ticket_price').html(data);
+//         },
+//         error:function(error){
+//             alert("The Error is "+error);
+//         }
+//     });
+// }
 </script>
 
 </html>
