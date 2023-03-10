@@ -191,9 +191,10 @@ $row=mysqli_fetch_array($rs);
                             <div class="card">
                                 <div class="card-body">
                                     <form method="POST" action="stud_bus.php" name="myForm">
+                                        <table>
                                         <div class="form-group col-md-4">
                                             Route : <select class="form-control" onchange="updatePlaceSelect();"
-                                                id="bus_route_select" name="bus_route_select" class="form-control">
+                                                id="bus_route_select" name="bus_route_select" class="form-control" required>
                                                 <option value='' disabled selected>--- select place ---</option>
                                                 <?php
                                                 $con = mysqli_connect("localhost", "root", "", "studmgsystem");
@@ -208,7 +209,7 @@ $row=mysqli_fetch_array($rs);
 
                                         <div class="form-group col-md-4">
                                             Place : <select class="form-control" name="bus_place_select"
-                                                onchange="setBusPrice();" id="bus_place_select" class="form-control">
+                                                onchange="setBusPrice();" id="bus_place_select" class="form-control" required>
 
                                             </select>
                                         </div>
@@ -216,15 +217,14 @@ $row=mysqli_fetch_array($rs);
                                         <div class="form-group col-md-4">
                                             <!-- <h1>Display Radio Buttons</h1> -->
                                             <p>Ticket Type:</p>
-                                            <input type="radio" id="ticket" name="type" value="Monthly" checked
-                                                required>
+                                            <input type="radio" id="ticket" name="type" value="Monthly" checked required>
                                             <label style="margin-top: 2px;margin-left: 5px;"
                                                 for="monthly">Monthly</label>
                                         </div>
 
                                         <div class="form-group col-md-4">
                                             <label for="inputState">Month:</label>
-                                            <select name="month" class="form-control" id="month">
+                                            <select name="month" class="form-control" id="month"  required>
                                                 <option value="SelectState">Select Month</option>
                                                 <option value="March 2023">March 2023</option>
                                                 <option value="April 2023">June 2023</option>
@@ -236,21 +236,61 @@ $row=mysqli_fetch_array($rs);
 
                                             <tr>
                                                 <p>Price:</p>
-                                                <textarea type="text" id="bus_ticket_price" col="1" rows="1" readonly></textarea>
+                                                <textarea type="text" style="width: 132px" ; id="bus_ticket_price" col="1" rows="1" readonly ></textarea>
                                                 <!-- <td><input class="form-control" id="bus_ticket_price" readonly ></td> -->
                                             </tr>
 
-                                            <br><br>
+                                            <tr><br><br>
 
                                             <button type="submit" id="save_date" name="save_date" class="btn btn-primary">Apply</button>
-                                                
+                                            </tr>
+                                            </table>   
                                     </form>
                                 </div>
                             </div>
                         </div>
+                      
+                        <div class="col-md-6 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th>SL.No</th>
+                                            <th> </th>
+                                            <th>Route</th>
+                                            <th> </th>
+                                            <th>Stage</th>
+                                            <th> </th>
+                                            <th>Type</th>
+                                            <th> </th>
+                                            <th>Month</th>
+                                        </tr>
+                                        <?php
+                                            $con=mysqli_connect("localhost","root","","studmgsystem");
+                                            $sql = "SELECT * FROM `tbl_bus` WHERE stud_id = $uid";
+                                            $counter=0;
+                                            $result=mysqli_query($con,$sql);
+                                            while($row=mysqli_fetch_array($result)){?>
+                                        <tr>
+                                            <td><?php echo ++$counter; ?></td>
+                                            <td> </td>
+                                            <td><?=$row['route']?></td>
+                                            <td> </td>
+                                            <td><?=$row['stage']?></td>
+                                            <td> </td>
+                                            <td><?=$row['type']?></td>
+                                            <td> </td>
+                                            <td><?=$row['month']?></td>
+                                        </tr>
+                                        <?php } ?>
+                                    </table>
+
+
+
                     </div>
                 </div>
             </div>
+
         </div>
 
 
@@ -341,7 +381,7 @@ function check() {
 
             // $sql="INSERT INTO `tbl_bus`(`route`, `stage`,`type`,`month`,`status`) VALUES ('$route','$stage','$type','$month','true')";
             // echo "<script>alert('$stage');</script>";
-            $sql="INSERT INTO `tbl_bus` VALUES (null,'$route','$stage','$type','$month','pending')";
+            $sql="INSERT INTO `tbl_bus` (`stud_id`,`route`, `stage`,`type`,`month`,`status`) VALUES ('$uid','$route','$stage','$type','$month','pending')";
             $result=mysqli_query($con,$sql);
             if($result){
                 echo("<script>alert('Success')</script>");
@@ -385,8 +425,7 @@ var Changassery = ["Koratty", "Vizhikathodu", "Kallarakav", "Chirakadav", "Pazha
 ];
 var Ranni = ["Koratty", "Erumely", "Karimbinathod", "Mukkada", "Plachery", "Manthamaruthi", "Ranni"];
 var Ettumanoor = ["26 Mile", "Kanjirappally", "Kunnumbhagam", "Ponkunnam", "1 Mile", "Kooraly", "Vanchimala",
-    "Ettumanoor"
-];
+    "Ettumanoor"];
 
 $("#inputState").change(function() {
     var RouteSelected = $(this).val();
