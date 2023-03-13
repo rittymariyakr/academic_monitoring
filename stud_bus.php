@@ -225,7 +225,7 @@ $row=mysqli_fetch_array($rs);
                                         <div class="form-group col-md-4">
                                             <label for="inputState">Month:</label>
                                             <select name="month" class="form-control" id="month"  required>
-                                                <option value="SelectState">Select Month</option>
+                                                <option value=""></option>
                                                 <option value="March 2023">March 2023</option>
                                                 <option value="April 2023">June 2023</option>
                                                 <option value="May 2023">July 2023</option>
@@ -236,7 +236,7 @@ $row=mysqli_fetch_array($rs);
 
                                             <tr>
                                                 <p>Price:</p>
-                                                <textarea type="text" style="width: 132px" ; id="bus_ticket_price" col="1" rows="1" readonly ></textarea>
+                                                <textarea type="text" style="width: 132px" ; id="bus_ticket_price" name="fare" col="1" rows="1" readonly ></textarea>
                                                 <!-- <td><input class="form-control" id="bus_ticket_price" readonly ></td> -->
                                             </tr>
 
@@ -356,6 +356,7 @@ function check() {
         $stage = $_POST['bus_place_select'];
         $type = $_POST['type'];
         $month = $_POST['month'];
+        $fare = $_POST['fare'];
 
 
         $con=mysqli_connect("localhost","root","","studmgsystem");
@@ -381,11 +382,12 @@ function check() {
 
             // $sql="INSERT INTO `tbl_bus`(`route`, `stage`,`type`,`month`,`status`) VALUES ('$route','$stage','$type','$month','true')";
             // echo "<script>alert('$stage');</script>";
-            $sql="INSERT INTO `tbl_bus` (`stud_id`,`route`, `stage`,`type`,`month`,`status`) VALUES ('$uid','$route','$stage','$type','$month','pending')";
+            $sql="INSERT INTO `tbl_bus` (`stud_id`,`route`, `stage`,`type`,`month`,`fare`,`status`) VALUES ('$uid','$route','$stage','$type','$month','$fare','pending')";
             $result=mysqli_query($con,$sql);
             if($result){
+                $bus_id= $con->insert_id;
                 echo("<script>alert('Success')</script>");
-                echo("<script>window.location.href='payment.php';</script>");
+                echo("<script>window.location.href='payment.php?bus_id=$bus_id';</script>");
                 
             }
     }

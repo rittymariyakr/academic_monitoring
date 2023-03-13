@@ -6,7 +6,8 @@ session_start();
 include('DatabaseCon.php');
 $db=new DatabaseCon;
 $uid=$_SESSION['uid'];
-$s="select * from tbl_studreg where stud_id=$uid";
+$s="select * from tbl_studreg JOIN tbl_bus where tbl_studreg.stud_id = tbl_bus.stud_id ";
+//$s="SELECT *FROM tbl_studreg JOIN tbl_bus ON tbl_studreg.stud_id = tbl_bus.stud_id INNER JOIN tbl_route ON tbl_bus.route=tbl_route.route_name AND tbl_bus.stage=tbl_route.place WHERE tbl_bus.stud_id='$uid'"; 
 $rs=$db->selectData($s);
 $row=mysqli_fetch_array($rs);
 ?>
@@ -192,85 +193,92 @@ $row=mysqli_fetch_array($rs);
                         <div class="col-md-6 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
-                                    <form class="pt-3" >
-                                    <form action="#" method="POST">
-                                        <table>
-                                            <tr>
-                                                <td>Admission Number :</td>
-                                                <td><?=$row['admno']?></td>
-                                               
-                                            </tr>
-                                            <tr>
-                                                <td><br></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Student Name: </td>
-                                                <td><?=$row['First_name']?>&nbsp;<?php echo $row['Middle_nam']; ?>&nbsp;<?php echo $row['Last_name']; ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td><br></td>
-                                            </tr>
-                                        </table>
-                                        <div class="form-group">
-                                            <center><input type="button" class="btn btn-success float-right" name="pay" id="rzp-button1" value="pay now" onclick="pay_now()"></center>
-                                            <!-- <button type="button" class="btn btn-info btn-block btn-log" onclick="location.href='stud_bus.php'">
+                                    <form class="pt-3">
+                                        <form action="#" method="POST">
+                                            <table>
+                                                <tr>
+                                                    <td>Admission Number :</td>
+                                                    <td><?=$row['admno']?></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td><br></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Student Name: </td>
+                                                    <td><?=$row['First_name']?>&nbsp;
+                                                        <?php echo $row['Middle_nam']; ?>&nbsp;<?php echo $row['Last_name']; ?>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td><br></td>
+                                                </tr>
+                                            </table>
+                                            <div class="form-group">
+                                                <center><input type="button" class="btn btn-success float-right"
+                                                        name="pay" id="rzp-button1" value="pay now" onclick="pay_now()">
+                                                </center>
+                                                <!-- <button type="button" class="btn btn-info btn-block btn-log" onclick="location.href='stud_bus.php'">
                                             <div class="d-flex justify-content-between"><span>cancel</span></div> -->
-</div>
-                                            
-                                        </div>
+                                            </div>
+                                            <div class="form-outline form-white mb-4" style="display:none">
+                                                <input type="text" id="amt" class="form-control"
+                                                    value="<?= $_row['price']?>">
+                                            </div>
 
-
-
-                                        <script>
-                                        function pay_now() {
-                                            // var name = JQuery('#name').val();
-                                            var amt = 50000;
-                                            var options = {
-                                                "key": "rzp_test_TrNhWil0752ILm",
-                                                "amount": amt,
-                                                "currency": "INR",
-                                                "name": "Purple School",
-                                                "description": "Test Transaction",
-                                                "image": "https://drive.google.com/file/d/1FJCNPPMhML96z3s4IrR8-yGU4A6HLm2X/view?usp=share_link",
-                                                "handler": function(response) {
-                                                    jQuery.ajax({
-                                                        type: 'POST',
-                                                        url: 'Razorpay/payment.php',
-                                                        data: "payment_id=" + response
-                                                            .razorpay_payment_id + "&amt=" + amt +
-                                                            "&name=" + name,
-                                                        success: function(result) {
-                                                            window.location.href =
-                                                                "uploadfile/component-file-upload.php?payment_id=" +
-                                                                response.razorpay_payment_id;
-                                                        }
-
-                                                    })
-                                                    // if(response){
-                                                    //     window.location.href="/adsol/index.php";
-                                                    // }
-
-                                                }
-                                            };
-
-                                            var rzp1 = new Razorpay(options);
-                                            document.getElementById('rzp-button1').onclick = function(e) {
-                                                rzp1.open();
-                                                e.preventDefault();
-                                            }
-
-                                        }
-                                        </script>
                                 </div>
 
 
+
+                                <script>
+                                function pay_now() {
+                                    // var name = JQuery('#name').val();
+                                    var amt = "50000";
+                                    var options = {
+                                        "key": "rzp_test_memh6ACSKYdCkR",
+                                        "amount": amt * 100,
+                                        "currency": "INR",
+                                        "name": "Purple School",
+                                        "description": "Test Transaction",
+                                        "image": "https://drive.google.com/file/d/1FJCNPPMhML96z3s4IrR8-yGU4A6HLm2X/view?usp=share_link",
+                                        "handler": function(response) {
+                                            jQuery.ajax({
+                                                type: 'POST',
+                                                url: 'Razorpay/payment.php',
+                                                data: "payment_id=" + response
+                                                    .razorpay_payment_id + "&amt=" + amt +
+                                                    "&name=" + name,
+                                                success: function(result) {
+                                                    window.location.href =
+                                                        "uploadfile/component-file-upload.php?payment_id=" +
+                                                        response.razorpay_payment_id;
+                                                }
+
+                                            })
+
+
+                                        }
+                                    };
+
+                                    var rzp1 = new Razorpay(options);
+                                    document.getElementById('rzp-button1').onclick = function(e) {
+                                        rzp1.open();
+                                        e.preventDefault();
+                                    }
+
+                                }
+                                </script>
                             </div>
+
+
                         </div>
-
-
                     </div>
-                    <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
-                    <script type="text/javascript" src="scripts/custom.js"></script>
+
+
+                </div>
+                <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+                <script type="text/javascript" src="scripts/custom.js"></script>
 </body>
 
 </html>
@@ -278,13 +286,7 @@ $row=mysqli_fetch_array($rs);
 </div>
 </div>
 </div>
-
-
 </div>
-
-
-
-
 </div>
 <!-- content-wrapper ends -->
 <!-- partial:partials/_footer.html -->
